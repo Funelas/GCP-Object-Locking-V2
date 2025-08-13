@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "react-datepicker/dist/react-datepicker.css";
+
+@font-face{
+    font-family: "Raleway";
+    src: url("src/assets/fonts/Raleway-Regular.ttf") format("truetype");
+}

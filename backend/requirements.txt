@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+google-cloud-storage
+google-auth
+google-auth-oauthlib
+python-dotenv

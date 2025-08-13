@@ -1,0 +1,6 @@
+client_secret_*.json
+.env
+token*
+connection.py
+**/__pycache__/*
+keyfile.png
