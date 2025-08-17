@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import { FiCalendar } from "react-icons/fi";
 import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
+import toast from "react-hot-toast";
 import dayjs from "dayjs";
 const ObjectLockModal = ({ filename, objectId, incBuckets, setLockingFile, setLockChanges, setObjectIdToBuckets, setEditingFile, setObjectId, setIncBuckets, setEditingMetadata}) => {
   const [showCalendar, setShowCalendar] = useState(true);
@@ -59,7 +60,7 @@ const ObjectLockModal = ({ filename, objectId, incBuckets, setLockingFile, setLo
 
   const handleSave = () => {
     if (!selectedDate && !isIndefinite) {
-      alert("Please select a date or choose Indefinite.");
+      toast.error("Please select a date or choose Indefinite.");
       return;
     }
   

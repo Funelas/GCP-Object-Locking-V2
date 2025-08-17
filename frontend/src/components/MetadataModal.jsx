@@ -22,7 +22,7 @@ const MetadataModal = ({ filename, metadata, objectId, incBuckets, setEditingMet
       ...prev,
       [filename]: update,
     }));
-    console.log("Metadata Inc Buckets: ", incBuckets);
+ 
     // Update bucket mapping
     setObjectIdToBuckets(prev => ({
       ...prev, 

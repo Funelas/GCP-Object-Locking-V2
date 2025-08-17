@@ -2,7 +2,7 @@ import React from 'react'
 
 const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChanges, objectIdToBuckets, setNewFiles, setLockChanges, setMetadataChanges, setObjectIdToBuckets, setLoading, fetchFiles, setPage}) => {
     const saveAllChanges = async () => {
-        console.log("Lock Changes: ", lockChanges)
+      
         setLoading(true);
         
         try {
@@ -42,16 +42,16 @@ const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChang
           });
     
     
-          console.log("COMBINED UPDATES: ", combinedUpdates);
+        
           // Organize updates by bucket
           const newPayload = {};
-          console.log("OBJECT ID TO BUCKETS: ", objectIdToBuckets)
+          
           const uniqueBuckets = [...new Set(
             Object.values(objectIdToBuckets)
               .flatMap(inner => Object.values(inner))
               .flat()
           )];
-          console.log("Unique BUCKETS: ", uniqueBuckets);
+      
           // Initialize empty arrays for each bucket
           uniqueBuckets.forEach(bucketName => {
             newPayload[bucketName] = [];
@@ -82,10 +82,10 @@ const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChang
             throw new Error("🚨 Lock File Generation Mismatch. Please refresh the webpage.");
           }
           
-          alert("✅ All changes saved successfully.");
+          toast.success("✅ All changes saved successfully.");
           
         } catch (error) {
-          alert(error.message || "❌ Failed to save changes. Please try again.");
+          toast.error(error.message || "❌ Failed to save changes. Please try again.");
         } finally {
           // Reset all states
           setNewFiles([]);

@@ -40,9 +40,7 @@ const FilesList = () => {
   const [expiredFiles, setExpiredFiles] = useState([]);
   const [newFiles, setNewFiles] = useState([]); // Added to track new files at App level
   
-  useEffect(() =>{
-    console.log("Visible Files: ", visibleFiles)
-  }, [visibleFiles])
+
   const mainBucket = "tempbucket24" // Where JSON is stored 
   const fetchFiles = useCallback(async () => {
     setLoading(true);
@@ -75,7 +73,7 @@ const FilesList = () => {
         acc[file.name] = [...(acc[file.name] || []), ...file.buckets];
         return acc;
       }, {});
-      console.log("Expired Maps", expiredMaps);
+   
       setObjectIdToBuckets(expiredMaps);
       
     } catch (err) {
@@ -85,10 +83,7 @@ const FilesList = () => {
     }
   }, [search])
   
-  useEffect(() => {
-    console.log("Expired Files : ", expiredFiles);
-    console.log("Object Id To Buckets: ", objectIdToBuckets)
-  }, [objectIdToBuckets]);
+
 
   useEffect(() => {
     fetchFiles();
