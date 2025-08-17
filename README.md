@@ -153,7 +153,6 @@ GCP-Object-Locking-V2/
 ## Configuration Notes
 
 - **Full Control Scope**: Required for editing metadata and overwriting retention policies
-- **Read-Only Scope**: Use `https://www.googleapis.com/auth/devstorage.read_only` for read-only access
 - **Multiple Buckets**: Add additional bucket configurations following the same pattern (`BUCKET3`, `BUCKET4`, etc.)
 - **Token Files**: Will be automatically generated during first authentication
 
@@ -164,13 +163,4 @@ GCP-Object-Locking-V2/
 - Check that all environment variables are correctly set
 - Make sure both servers are running on the specified ports
 
-## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-[Add your license information here]
