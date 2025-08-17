@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChanges, objectIdToBuckets, setNewFiles, setLockChanges, setMetadataChanges, setObjectIdToBuckets, setLoading}) => {
+const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChanges, objectIdToBuckets, setNewFiles, setLockChanges, setMetadataChanges, setObjectIdToBuckets, setLoading, fetchFiles, setPage}) => {
     const saveAllChanges = async () => {
         console.log("Lock Changes: ", lockChanges)
         setLoading(true);
@@ -13,7 +13,7 @@ const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChang
             lockstatus: {
               temporary_hold: file.temporary_hold,
               hold_expiry: file.expiration_date
-            }
+            },
           }));
     
           // Combine all updates
@@ -71,9 +71,8 @@ const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChang
             });
           });
     
-          console.log("PAYLOAD: ", newPayload)
           // Send updates to server
-          const response = await fetch("http://localhost:8000/update-all-buckets", {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/update-all-buckets`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newPayload),
@@ -93,7 +92,8 @@ const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChang
           setMetadataChanges({});
           setLockChanges({});
           setObjectIdToBuckets({});
-          
+          fetchFiles();
+          setPage(1);
           setLoading(false);
         }
       };
@@ -101,7 +101,7 @@ const SaveAllChangesBtn = ({hasChanges, expiredFiles, metadataChanges, lockChang
         (
         <div className="flex justify-center pt-4">
           <button
-            className="text-white px-10 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-4 font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
+            className="font-accent text-white px-8 py-2 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-4 font-bold text-md disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
             style={{background: 'linear-gradient(135deg, #009432 0%, #007428 100%)'}}
             onClick={saveAllChanges}
           >

@@ -12,10 +12,10 @@ const EditMetadataBtn = ({setIncBuckets, incBuckets, metadataChanges, setEditing
         }; 
   return (
     <button
-            className="bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm flex items-center space-x-2 hover:shadow-md font-semibold hover:border-gray-300 active:scale-95"
+            className="font-accent bg-gray-300 hover:bg-gray-400 text-gray-700 border-2 border-gray-500 px-3.5 py-2 rounded-xl transition-all duration-200 text-[0.7875rem] flex items-center space-x-2 hover:shadow-md font-semibold hover:border-gray-700 active:scale-95"
             onClick={() => handleEditMetadata(filename, incBuckets)}
           >
-            <span className="text-base">✏️</span>
+            <span className="font-accent text-base">✏️</span>
             <span>Edit</span>
     </button>
   )

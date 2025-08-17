@@ -69,7 +69,7 @@ const AddObjectBtn = ({ setLockingFile, setObjectId, setIncBuckets, addFileQuery
         
     setLoading(true);
     try {
-        const res = await fetch(`http://localhost:8000/search-objects?query=${addFileQuery}`)
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/search-objects?query=${addFileQuery}`)
         const data = await res.json();
         const allResults = data[0]
         const objectCount = data[1];
@@ -114,15 +114,7 @@ const AddObjectBtn = ({ setLockingFile, setObjectId, setIncBuckets, addFileQuery
   return (
     <div className="ml-2">
       <button
-        className="text-white px-6 min-h-[52px] rounded-lg w-fit font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-        style={{
-          backgroundColor: '#009432',
-          ':hover': {
-            backgroundColor: '#007a29'
-          }
-        }}
-        onMouseEnter={(e) => e.target.style.backgroundColor = '#007a29'}
-        onMouseLeave={(e) => e.target.style.backgroundColor = '#009432'}
+        className="font-accent text-white text-sm px-6 h-10 rounded-lg w-fit font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 hover:bg-[#007a29] bg-[#009432]"
         onClick={handleSearch}
       >
         🔒 Lock

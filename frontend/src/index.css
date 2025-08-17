@@ -1,7 +1,40 @@
 @import "tailwindcss";
 @import "react-datepicker/dist/react-datepicker.css";
 
-@font-face{
+/* src/styles/fonts.css */
+
+/* Font-face declarations */
+@font-face {
+    font-family: "Inter";
+    src: url("/src/assets/fonts/Inter_28pt-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Poppins";
+    src: url("/src/assets/fonts/Poppins-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
     font-family: "Raleway";
-    src: url("src/assets/fonts/Raleway-Regular.ttf") format("truetype");
-}
+    src: url("/src/assets/fonts/Raleway-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* Tailwind custom classes for primary, secondary, and accent fonts */
+  @layer utilities {
+    .font-primary {
+      font-family: "Inter", sans-serif;
+    }
+    .font-secondary {
+      font-family: "Poppins", sans-serif;
+    }
+    .font-accent {
+      font-family: "Raleway", sans-serif;
+    }
+  }
+  

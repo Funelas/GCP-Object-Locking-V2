@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect} from "react";
-import toast, {Toaster} from "react-hot-toast";
+import toast from "react-hot-toast";
 import MetadataModal from "./MetadataModal.jsx";
 import ObjectLockModal from "./ObjectLockModal.jsx";
 import Pagination from "./Pagination.jsx";
@@ -40,11 +40,14 @@ const FilesList = () => {
   const [expiredFiles, setExpiredFiles] = useState([]);
   const [newFiles, setNewFiles] = useState([]); // Added to track new files at App level
   
+  useEffect(() =>{
+    console.log("Visible Files: ", visibleFiles)
+  }, [visibleFiles])
   const mainBucket = "tempbucket24" // Where JSON is stored 
   const fetchFiles = useCallback(async () => {
     setLoading(true);
     try {
-      const url = new URL("http://127.0.0.1:8000/files");
+      const url = new URL(`${import.meta.env.VITE_API_BASE_URL}/files`);
       if (search) url.searchParams.append("query", search);
       url.searchParams.append("bucket", mainBucket);
       const res = await fetch(url);
@@ -68,6 +71,13 @@ const FilesList = () => {
 
       setAllFiles([...filtered, ...uniqueNewFiles]);
       setExpiredFiles(expired);
+      const expiredMaps = expired.reduce((acc, file) => {
+        acc[file.name] = [...(acc[file.name] || []), ...file.buckets];
+        return acc;
+      }, {});
+      console.log("Expired Maps", expiredMaps);
+      setObjectIdToBuckets(expiredMaps);
+      
     } catch (err) {
       toast.error("Failed to fetch files:", err, " Please Reload.");
     } finally {
@@ -75,10 +85,14 @@ const FilesList = () => {
     }
   }, [search])
   
+  useEffect(() => {
+    console.log("Expired Files : ", expiredFiles);
+    console.log("Object Id To Buckets: ", objectIdToBuckets)
+  }, [objectIdToBuckets]);
 
   useEffect(() => {
     fetchFiles();
-  }, [search, newFiles]); // Added bucketName and newFiles as dependencies
+  }, [search]); // Added bucketName as dependencies
 
   const hasChanges = useMemo(() => 
     Object.keys(lockChanges).length > 0 || Object.keys(metadataChanges).length > 0,
@@ -142,75 +156,61 @@ const FilesList = () => {
       <SearchBar setSearch={setSearch} setPage={setPage}/>
 
       {/* Files List Section */}
-      <div className="bg-white rounded-2xl shadow-lg border-2 border-[#009432] overflow-hidden">
-        <div className="bg-gradient-to-r from-gray-50 to-white p-6 border-b border-gray-100">
-          <div className="flex justify-between m-2">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <span className="text-white text-lg">📋</span>
-            </div>
-            <h2 className="text-gray-1100 text-3xl font-bold tracking-tight">File List</h2>
-          </div>
-
-
-
-              <div className="flex items-end justify-end m-2">
-                <LockByIdInput 
-                  addFileQuery={addFileQuery}
-                  setAddFileQuery={setAddFileQuery}
-                  addClientQuery={addClientQuery}
-                  setAddClientQuery={setAddClientQuery}
-                />
-                <AddObjectBtn 
-                  setLockingFile={setLockingFile} 
-                  setObjectId={setObjectId} 
-                  setIncBuckets={setIncBuckets}
-                  addFileQuery={addFileQuery}
-                  setAddFileQuery={setAddClientQuery}
-                  allFiles={allFiles}
-                  newFiles={newFiles}
-                  setAllFiles={setAllFiles}
-                  setNewFiles={setNewFiles}
-                  PAGE_SIZE={PAGE_SIZE}
-                  setPage={setPage}
-                  setLoading = {setLoading}/>
+      <div className="bg-white rounded-2xl shadow-lg border border-[#009432] overflow-hidden w-[90%] mx-auto">
+        <div className="bg-white to-white p-6 border-b border-gray-100 w-full">
+          <div className="flex justify-between m-2 w-full">
+            <div className="flex items-center space-x-3 w-[40%] justify-center">
+              <div className="w-10 h-10 flex items-center justify-center">
+                <span className="text-white text-4xl">📋</span>
               </div>
+              <h2 className="font-primary text-gray-1100 text-2xl font-bold tracking-tight">File List</h2>
+            </div>
+
+            <div className="flex items-end justify-end m-2 w-[60%]">
+              <LockByIdInput 
+                addFileQuery={addFileQuery}
+                setAddFileQuery={setAddFileQuery}
+                addClientQuery={addClientQuery}
+                setAddClientQuery={setAddClientQuery}
+              />
+              <AddObjectBtn 
+                setLockingFile={setLockingFile} 
+                setObjectId={setObjectId} 
+                setIncBuckets={setIncBuckets}
+                addFileQuery={addFileQuery}
+                setAddFileQuery={setAddClientQuery}
+                allFiles={allFiles}
+                newFiles={newFiles}
+                setAllFiles={setAllFiles}
+                setNewFiles={setNewFiles}
+                PAGE_SIZE={PAGE_SIZE}
+                setPage={setPage}
+                setLoading = {setLoading}/>
+            </div>
           </div>
           
         </div>
 
-        {/* Table Header */}
+        {/* Updated Table Header - Left aligned to match content */}
         {visibleFiles.length > 0 && (
-          <div className="grid grid-cols-4 gap-6 px-8 py-5 border-b-2 border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-            <div className="flex items-center space-x-3 text-gray-700 font-bold text-sm uppercase tracking-wider justify-center">
-              {/* <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{backgroundColor: '#009432'}}>
-                <span className="text-white text-xs">📄</span>
-              </div> */}
-              <span>Client ID</span>
+          <div className="grid grid-cols-4 gap-6 px-8 border-y-1 border-gray-700 bg-gray-200 sticky top-0 z-10 divide-x divide-gray-700 items-stretch h-12">
+            <div className="font-primary text-gray-700 font-bold text-[0.7875rem] uppercase tracking-wide flex items-center">
+              Client ID
             </div>
-            <div className="flex items-center space-x-3 text-gray-700 font-bold text-sm uppercase tracking-wider justify-center">
-              {/* <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{backgroundColor: '#009432'}}>
-                <span className="text-white text-xs">🏷️</span>
-              </div> */}
-              <span>Metadata</span>
+            <div className="font-primary text-gray-700 font-bold text-[0.7875rem] uppercase tracking-wide flex items-center">
+              Metadata
             </div>
-            <div className="flex items-center space-x-3 text-gray-700 font-bold text-sm uppercase tracking-wider justify-center">
-              {/* <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{backgroundColor: '#009432'}}>
-                <span className="text-white text-xs">🔐</span>
-              </div> */}
-              <span>Lock Status</span>
+            <div className="font-primary text-gray-700 font-bold text-[0.7875rem] uppercase tracking-wide flex items-center">
+              Lock Status
             </div>
-            <div className="flex items-center space-x-3 text-gray-700 font-bold text-sm uppercase tracking-wider justify-center">
-              {/* <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{backgroundColor: '#009432'}}>
-                <span className="text-white text-xs">⚡</span>
-              </div> */}
-              <span>Actions</span>
+            <div className="font-primary text-gray-700 font-bold text-[0.7875rem] uppercase tracking-wide flex items-center">
+              Actions
             </div>
           </div>
         )}
-        
-        {/* File Entries */}
-        <div className="min-h-96">
+
+        {/* Updated File Entries Container */}
+        <div className="min-h-96 bg-white">
           {visibleFiles.length === 0 ? (
             <div className="flex items-center justify-center py-20">
               <div className="text-center space-y-6 max-w-md">
@@ -225,30 +225,27 @@ const FilesList = () => {
               </div>
             </div>
           ) : (
-            <div className="divide-y-2 divide-gray-50">
+            <div className="relative">
               {visibleFiles.map((details, index) => (
-                <div 
-                  key={`${details.name}-${index}`} 
-                  className="px-6 py-4 hover:bg-gradient-to-r hover:from-gray-50 hover:to-white transition-all duration-200"
-                >
-                  <FileEntry
-                    filename={details.name}
-                    details={details}
-                    metadataChanges={metadataChanges}
-                    lockChanges={lockChanges}
-                    setLockChanges = {setLockChanges}
-                    incBuckets={details.buckets || []}
-                    setIncBuckets={setIncBuckets}
-                    setEditingMetadata={setEditingMetadata}
-                    setEditingFile = {setEditingFile}
-                    allFiles = {allFiles}
-                    setObjectIdToBuckets = {setObjectIdToBuckets}
-                    setLockingFile = {setLockingFile}
-                  />
-                </div>
+                <FileEntry
+                  key={`${details.name}-${index}`}
+                  filename={details.name}
+                  details={details}
+                  metadataChanges={metadataChanges}
+                  lockChanges={lockChanges}
+                  setLockChanges={setLockChanges}
+                  incBuckets={details.buckets || []}
+                  setIncBuckets={setIncBuckets}
+                  setEditingMetadata={setEditingMetadata}
+                  setEditingFile={setEditingFile}
+                  allFiles={allFiles}
+                  setObjectIdToBuckets={setObjectIdToBuckets}
+                  setLockingFile={setLockingFile}
+                />
               ))}
             </div>
           )}
+
         </div>
       </div>
 
@@ -267,6 +264,10 @@ const FilesList = () => {
       setMetadataChanges = {setMetadataChanges}
       setObjectIdToBuckets = {setObjectIdToBuckets}
       setLoading = {setLoading}
+      fetchFiles={fetchFiles}
+      allFiles={allFiles}
+      setPage={setPage}
+      PAGE_SIZE={PAGE_SIZE}
       />
     </div>
   );

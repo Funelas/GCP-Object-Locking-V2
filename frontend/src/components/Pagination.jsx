@@ -30,7 +30,7 @@ const Pagination = ({ page, setPage, allFiles, setVisibleFiles, PAGE_SIZE}) => {
   return (pages > 0 ?
     (<div className="flex justify-center gap-2 mt-4">
       <button
-        className="px-3 py-1 bg-gray-600 text-white rounded disabled:opacity-50"
+        className="font-accent px-3 py-1 bg-gray-600 text-sm text-white rounded disabled:opacity-50"
         disabled={page === 1}
         onClick={() => setPage(page - 1)}
       >
@@ -39,12 +39,12 @@ const Pagination = ({ page, setPage, allFiles, setVisibleFiles, PAGE_SIZE}) => {
 
       {getPagination().map((p, i) =>
         p === "..." ? (
-            <span key={`ellipsis-${i}`} className="px-2 text-gray-400">...</span>
+            <span key={`ellipsis-${i}`} className="font-accent text-sm px-2 text-gray-400">...</span>
         ) : (
             <button
             key={`page-${p}`}
-            className={`px-3 py-1 rounded ${
-                page === p ? "bg-green-500 text-white" : "bg-gray-700 text-gray-300"
+            className={`font-accent text-sm px-3 py-1 rounded ${
+                page === p ? "hover:bg-[#007a29] bg-[#009432] text-white" : "bg-gray-700 text-gray-300"
             }`}
             onClick={() => setPage(p)}
             >
@@ -55,7 +55,7 @@ const Pagination = ({ page, setPage, allFiles, setVisibleFiles, PAGE_SIZE}) => {
 
 
       <button
-        className="px-3 py-1 bg-gray-600 text-white rounded disabled:opacity-50"
+        className="font-accent text-sm px-3 py-1 bg-gray-600 text-white rounded disabled:opacity-50"
         disabled={page === pages}
         onClick={() => setPage(page + 1)}
       >

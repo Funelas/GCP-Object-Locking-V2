@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query, Body
+from fastapi import FastAPI, Query, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from gcs_utils import get_credentials, get_locked_file_with_generation, update_locked_file
 from google.cloud import storage
@@ -12,24 +12,26 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        os.getenv("FRONTEND_URL"),
+        os.getenv("FRONTEND_URL1"),
+        os.getenv("FRONTEND_URL2")
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+
 @app.get("/files")
 def get_files(
     query: str = "",
     bucket: str = "",
 ):
-    
     try:
+        load_dotenv()
         # lock_blob always true
-        creds = get_credentials(TOKEN_FILE=os.getenv(f"TOKEN_FILE_{bucket}"), CREDENTIALS_FILE=os.getenv(f"CREDENTIALS_FILE_{bucket}"), SCOPES=[os.getenv(f"SCOPES_{bucket}")])
+        creds = get_credentials(bucket)
         gcs_client = storage.Client(project="bucketdemoproject", credentials=creds)
         bucket_name = bucket
         bucket = gcs_client.bucket(bucket_name)
@@ -87,7 +89,7 @@ def update_all_buckets(data: UpdateAllBucketsPayload = Body(...)):
         print(f"Bucket Entry: {bucket_entry}")
         bucket_name = bucket_entry
         updates = data[bucket_name]
-        creds = get_credentials(TOKEN_FILE=os.getenv(f"TOKEN_FILE_{bucket_name}"), CREDENTIALS_FILE=os.getenv(f"CREDENTIALS_FILE_{bucket_name}"), SCOPES=os.getenv(f"SCOPES_{bucket_name}"))
+        creds = get_credentials(bucket_name)
         gcs_client = storage.Client(project="bucketdemoproject", credentials=creds)
         try:
             bucket = gcs_client.get_bucket(bucket_or_name= bucket_name)
@@ -163,9 +165,11 @@ def search_objects(query: str = Query("")):
     objects_count = 0
     for bucket_name in buckets:
         try:
-            creds = get_credentials(TOKEN_FILE=os.getenv(f"TOKEN_FILE_{bucket_name}"), CREDENTIALS_FILE=os.getenv(f"CREDENTIALS_FILE_{bucket_name}"), SCOPES=os.getenv(f"SCOPES_{bucket_name}"))
+            creds = get_credentials(bucket_name)
             client = storage.Client(project="bucketdemoproject", credentials=creds)
             bucket = client.bucket(bucket_name)
+            print(f"Bucket Name: {bucket_name}")
+            print(list(bucket.list_blobs()))
             matching = [blob.name for blob in bucket.list_blobs(match_glob= f"**{query}**")]
             if matching:
                 buckets_that_contains.append(bucket_name)
@@ -177,7 +181,7 @@ def search_objects(query: str = Query("")):
     print(f"All Results: {all_results}")
     return all_results, objects_count
 
-@app.get("/get-buckets")
+
 def get_buckets():
     # If given credentials are for the whole project
     # project_id = "projectidstring"
@@ -186,6 +190,7 @@ def get_buckets():
     # buckets = client.list_buckets()
 
     # bucket_names = [bucket.name for bucket in buckets]
-    # return {"buckets": bucket_names}
-    bucket_names = [os.getenv(f"BUCKET{i}")for i in range(1,6)]
+    # return bucket_names
+    number_of_buckets = 5
+    bucket_names = [os.getenv(f"BUCKET{i}")for i in range(1,number_of_buckets + 1)]
     return bucket_names 

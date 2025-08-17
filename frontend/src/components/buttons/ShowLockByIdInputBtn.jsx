@@ -2,7 +2,8 @@ import React from 'react'
 
 const ShowLockByIdInputBtn = ({setShowLockByIdInput, showLockByIdInput}) => {
     return (
-      <button
+      <div className="w-[20%]">
+          <button
         className="bg-white border-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:shadow-md flex items-center gap-2"
         style={{
           borderColor: '#009432',
@@ -20,6 +21,8 @@ const ShowLockByIdInputBtn = ({setShowLockByIdInput, showLockByIdInput}) => {
       >
         Lock Item {showLockByIdInput ? "▼" : "▲"}
       </button>
+      </div>
+      
     )
   }
   

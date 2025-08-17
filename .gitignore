@@ -4,3 +4,4 @@ token*
 connection.py
 **/__pycache__/*
 keyfile.png
+creds/

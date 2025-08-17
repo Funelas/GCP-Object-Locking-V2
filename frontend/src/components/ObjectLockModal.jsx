@@ -70,9 +70,9 @@ const ObjectLockModal = ({ filename, objectId, incBuckets, setLockingFile, setLo
   };
   
   return (
-    <div className="fixed inset-0 backdrop-blur-lg flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out bg-black/20 h-[100vh]">
+    <div className="fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out bg-black/50 h-[100vh]">
       <div className="bg-white rounded-2xl p-8 w-[600px] max-w-[95vw] shadow-2xl relative border border-gray-100 max-h-[80vh] max-h-[90%] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        <h2 className="font-primary text-2xl font-bold mb-6 text-gray-800">
           🔒 Lock Object
         </h2>
         <div className="mb-4 px-4 py-3 bg-[#009432]/5 rounded-xl border border-[#009432]/20">
@@ -81,7 +81,7 @@ const ObjectLockModal = ({ filename, objectId, incBuckets, setLockingFile, setLo
   
         <div className="space-y-6">
           <div className="space-y-3">
-            <label className="block text-sm font-semibold text-gray-600 mb-3 px-1">
+            <label className="font-primary block text-sm font-semibold text-gray-600 mb-3 px-1">
               Select Lock Expiry Date
             </label>
   
@@ -96,12 +96,12 @@ const ObjectLockModal = ({ filename, objectId, incBuckets, setLockingFile, setLo
                     : ""
                 }
                 readOnly
-                className="w-full bg-gray-50 text-gray-800 p-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-[#009432] focus:outline-none transition-colors duration-200"
+                className="font-primary w-full bg-gray-50 text-gray-800 p-3 pr-12 rounded-xl border-2 border-gray-200 focus:border-[#009432] focus:outline-none transition-colors duration-200"
                 placeholder="Pick a date or select Indefinite"
               />
               <button
                 onClick={() => setShowCalendar(!showCalendar)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#009432] transition-colors duration-200"
+                className="font-accent absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#009432] transition-colors duration-200"
                 title="Pick a date"
               >
                 <FiCalendar size={20} />
@@ -134,14 +134,14 @@ const ObjectLockModal = ({ filename, objectId, incBuckets, setLockingFile, setLo
                   className="w-4 h-4 text-[#009432] border-2 border-gray-300 rounded focus:ring-[#009432] focus:ring-2"
                 />
               </div>
-              <label htmlFor="indefinite" className="text-sm text-gray-700 leading-relaxed">
-                Set lock to <span className="font-bold text-[#009432]">Indefinite</span> (no expiration)
+              <label htmlFor="indefinite" className="text-sm text-gray-700 leading-relaxed font-secondary">
+                Set lock to <span className="font-bold text-[#009432] font-primary">Indefinite</span> (no expiration)
               </label>
             </div>
           </div>
         </div>
   
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 mt-2">
           <button
             onClick={() => onClose(null, null, null)}
             className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-xl font-medium transition-all duration-200"
